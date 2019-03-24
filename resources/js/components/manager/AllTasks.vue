@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import ShowAllTasks from './tasks/index'
+  import ShowAllTasks from './tasks'
 
   export default {
     components: {ShowAllTasks},
