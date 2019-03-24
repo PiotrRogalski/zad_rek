@@ -30,11 +30,41 @@ class DatabaseSeeder extends Seeder
     protected $positions = [
         'Telemarketer',
         'Dyrektor',
+        'Archiwista',
+        'Asystent Dyrektora',
+        'Asystent Działu',
+        'Asystent Handlowy',
+        'Asystentka Biura',
+        'Bibliotekarz',
+        'Fakturzystka',
+        'Kierownik biura',
+        'Kierownik Recepcji',
+        'Pracownik Biurowy',
+        'Sekretarka',
     ];
 
     protected $taskTitles = [
-        'Utworzenie konta klienta',
-        'Pozycjonowanie strony',
+        'Komentarze prawne',
+        'Komentarze informacyjne',
+        'Wyjaśnianie zamierzeń',
+        'Ostrzeżenia o konsekwencjach',
+        'Komentarze TODO',
+        'Wyodrębnienie bloków try-catch',
+        'Obsługa błędów jest jedną operacją',
+        'Przyciąganie zależności w Error.java',
+        'Komentarze wymagane',
+        'Komentarze dziennika',
+        'Komentarze wprowadzające szum informacyjny',
+        'Nie używaj komentarzy, jeżeli można użyć funkcji lub zmiennej',
+        'Komentarze w klamrach zamykających',
+        'Atrybuty i dopiski',
+        'Pionowe odstępy pomiędzy segmentami kodu',
+        'Zasady formatowania wujka Boba',
+        'Rozpoczynanie od pisania instrukcji try-catch-finally',
+        'Użycie niekontrolowanych wyjątków',
+        'Dostarczanie kontekstu za pomocą wyjątków',
+        'Definiowanie klas wyjątków w zależności od potrzeb wywołującego',
+        'Definiowanie normalnego przepływu',
     ];
 
     /** @var Permission */
@@ -60,7 +90,7 @@ class DatabaseSeeder extends Seeder
         $this->seedPermissions();
         $this->seedGroups();
         $this->seedPositions();
-        $this->seedTasks();
+        $tasks = collect($this->seedTasks());
 
         $this->createEmployee();
         $this->createManager();
@@ -69,9 +99,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Populate the pivot table
-        App\User::all()->each(function ($user) use ($task) {
+        App\User::all()->each(function ($user) use ($tasks) {
             $user->tasks()->attach(
-                $task->random(rand(1, 3))->pluck('id')->toArray()
+                $tasks->random(rand(1, 3))->pluck('id')->toArray()
             );
         });
     }
@@ -109,13 +139,17 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function seedTasks()
+    /** @return \App\Model\Task[] */
+    private function seedTasks(): array
     {
+        $tasks = [];
         foreach ($this->taskTitles as $title) {
-            factory(App\Model\Task::class)->create([
+            $tasks[] = factory(App\Model\Task::class)->create([
                 'title' => $title,
             ]);
         }
+
+        return $tasks;
     }
 
     public function createEmployee(): void
@@ -125,7 +159,7 @@ class DatabaseSeeder extends Seeder
         }
         $this->createUser(
             'Pracownik',
-            'pracownik@koni.pl',
+            'pracownik@gmail.com',
             Group::query()->inRandomOrder()->first(),
             Position::query()->inRandomOrder()->first(),
             $this->employeePermission
@@ -155,7 +189,7 @@ class DatabaseSeeder extends Seeder
         }
         $this->createUser(
             'Menadżer',
-            'menadzer@koni.pl',
+            'menadzer@gmail.com',
             Group::query()->inRandomOrder()->first(),
             Position::query()->inRandomOrder()->first(),
             $this->managerPermission

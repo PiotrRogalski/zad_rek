@@ -5,8 +5,8 @@
                            class="hidden-md-and-up"></v-toolbar-side-icon>
       <v-toolbar-title v-if="!isLogged">Zadanie Rekrutacyjne</v-toolbar-title>
       <v-toolbar-title class="mr-3">{{user.name + ' ' + user.surname}}</v-toolbar-title>
-      <b class="blue-grey--text text--darken-3" v-if="User.isManager()">Menadżer</b>
-      <b class="blue-grey--text text--darken-3" v-if="User.isWorker()">Pracownik</b>
+      <b class="blue-grey--text text--darken-3" v-if="isManager">Menadżer</b>
+      <b class="blue-grey--text text--darken-3" v-if="isWorker">Pracownik</b>
 
       <v-spacer></v-spacer>
 

@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     $firstName = $faker->firstName;
     $lastName = $faker->lastName;
+    $email = mb_strtolower($firstName) . mb_strtolower($lastName) . '@gmail.com';
     $name = $firstName . ' ' . $lastName;
 
     $now = now();
@@ -25,7 +26,7 @@ $factory->define(User::class, function (Faker $faker) {
         'name' => $firstName,
         'surname' => $lastName,
         'slug' => Str::slug($name) . random_int(1, 99),
-        'email' => $faker->unique()->safeEmail,
+        'email' => $email,
         'password' => 'password', // password
         'remember_token' => Str::random(10),
         'group_id' => function () {

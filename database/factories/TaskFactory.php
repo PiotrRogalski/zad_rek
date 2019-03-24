@@ -10,7 +10,6 @@ $factory->define(App\Model\Task::class, function (Faker $faker) {
         'title' => $title,
         'slug' => Str::slug($title) . random_int(1, 99),
         'body' => $faker->text(1200),
-        'task_number' => 'Nr:2019/' . random_int(1, 999),
         'owner_id' => function () {
             return factory(\App\User::class)->create()->id;
         },
